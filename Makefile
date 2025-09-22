@@ -13,7 +13,7 @@ push: build
 	docker push $(IMAGE)
 
 run:
-	docker run --rm --name $(CONTAINER) -d -p 7080:7080 $(IMAGE)
+	docker run --rm --name $(CONTAINER) -p 7080:7080 $(IMAGE)
 
 stop:
 	docker stop $(CONTAINER)
