@@ -1,13 +1,22 @@
-.PHONY: build run stop clean
+.PHONY: build run stop clean push
+
+DOCKER_USER = theprogrammer67
+IMAGE_NAME = ocrserver
+CONTAINER = ocrserver
+TAG = latest
+IMAGE = $(DOCKER_USER)/$(IMAGE_NAME):$(TAG)
 
 build:
-	docker build -t ocrserver:latest .
+	docker build -t $(IMAGE) .
+
+push: build
+	docker push $(IMAGE)
 
 run:
-	docker run --rm --name ocrserver -d -p 7080:7080 ocrserver:latest
+	docker run --rm --name $(CONTAINER) -d -p 7080:7080 $(IMAGE)
 
 stop:
-	docker stop ocrserver
+	docker stop $(CONTAINER)
 
 clean:
-	docker rm ocrserver
+	docker rm $(CONTAINER)
