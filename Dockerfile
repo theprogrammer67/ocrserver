@@ -26,5 +26,5 @@ RUN wget https://raw.githubusercontent.com/Shreeshrii/tessdata_ocrb/master/ocrb.
 # Load languages
 RUN if [ -n "${LOAD_LANG}" ]; then apt-get install -y tesseract-ocr-${LOAD_LANG}; fi
 
-ENV PORT=8080
+ENV PORT=7080
 CMD ["ocrserver"]
