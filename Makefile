@@ -20,3 +20,6 @@ stop:
 
 clean:
 	docker rm $(CONTAINER)
+
+logs:
+	docker logs $(CONTAINER)
