@@ -26,7 +26,7 @@ func FileUpload(w http.ResponseWriter, r *http.Request) {
 	// upload, h, err := r.FormFile("file")
 	upload, _, err := r.FormFile("file")
 	if err != nil {
-		render.JSON(http.StatusBadRequest, err)
+		renderError(render, http.StatusBadRequest, err)
 		return
 	}
 	defer upload.Close()
@@ -34,7 +34,7 @@ func FileUpload(w http.ResponseWriter, r *http.Request) {
 	// Create physical file
 	tempfile, err := ioutil.TempFile("", "ocrserver"+"-")
 	if err != nil {
-		render.JSON(http.StatusBadRequest, err)
+		renderError(render, http.StatusBadRequest, err)
 		return
 	}
 	defer func() {
@@ -44,7 +44,7 @@ func FileUpload(w http.ResponseWriter, r *http.Request) {
 
 	// Make uploaded physical
 	if _, err = io.Copy(tempfile, upload); err != nil {
-		render.JSON(http.StatusInternalServerError, err)
+		renderError(render, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -69,7 +69,7 @@ func FileUpload(w http.ResponseWriter, r *http.Request) {
 		out, err = client.Text()
 	}
 	if err != nil {
-		render.JSON(http.StatusBadRequest, err)
+		renderError(render, http.StatusBadRequest, err)
 		return
 	}
 

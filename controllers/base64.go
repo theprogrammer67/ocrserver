@@ -28,13 +28,13 @@ func Base64(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(body)
 	if err != nil {
-		render.JSON(http.StatusBadRequest, err)
+		renderError(render, http.StatusBadRequest, err)
 		return
 	}
 
 	tempfile, err := ioutil.TempFile("", "ocrserver"+"-")
 	if err != nil {
-		render.JSON(http.StatusInternalServerError, err)
+		renderError(render, http.StatusInternalServerError, err)
 		return
 	}
 	defer func() {
@@ -43,13 +43,13 @@ func Base64(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	if len(body.Base64) == 0 {
-		render.JSON(http.StatusBadRequest, fmt.Errorf("base64 string required"))
+		renderError(render, http.StatusBadRequest, fmt.Errorf("base64 string required"))
 		return
 	}
 	body.Base64 = regexp.MustCompile("data:image\\/png;base64,").ReplaceAllString(body.Base64, "")
 	b, err := base64.StdEncoding.DecodeString(body.Base64)
 	if err != nil {
-		render.JSON(http.StatusBadRequest, err)
+		renderError(render, http.StatusBadRequest, err)
 		return
 	}
 	tempfile.Write(b)
@@ -68,7 +68,7 @@ func Base64(w http.ResponseWriter, r *http.Request) {
 
 	text, err := client.Text()
 	if err != nil {
-		render.JSON(http.StatusInternalServerError, err)
+		renderError(render, http.StatusInternalServerError, err)
 		return
 	}
 
